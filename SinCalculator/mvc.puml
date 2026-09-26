@@ -1,0 +1,106 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam classFontColor black
+skinparam packageBackgroundColor white
+skinparam packageBorderColor black
+skinparam packageFontColor black
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam titleFontColor black
+title Архитектура приложения SinCalculator
+
+package "com.example.sincalculator" {
+
+    class Main {
+        +main(args: String[])
+    }
+
+    package "controller" {
+
+        class SinController {
+            -model: SinModel
+            -view: MainFrame
+            -dialog: InputDialog
+            -audioPlayer: AudioPlayer
+            +openInputDialog()
+            -updateView()
+        }
+
+        class AudioPlayer {
+            +play()
+            +stop()
+        }
+    }
+
+    package "model" {
+
+        class SinData {
+            -name: String
+            -birthDate: String
+            -smokingYears: int
+            -delaysPerWeek: int
+            -socialHoursPerDay: double
+            -brokenPromisesPerWeek: int
+            -swearingPerWeek: int
+        }
+
+        class SinModel {
+            -data: SinData
+            -result: double
+            +calculate(data: SinData)
+            +getResult(): double
+            +getData(): SinData
+        }
+    }
+
+    package "view" {
+
+        class MainFrame {
+            +updateResult()
+            +showError()
+        }
+
+        class InputDialog {
+            -nameField: JTextField
+            -birthDateField: JTextField
+            -smokingField: JTextField
+            -delaysField: JTextField
+            -socialField: JTextField
+            -promisesField: JTextField
+            -swearingField: JTextField
+            +getResult(): SinData
+            +createResult()
+        }
+
+        class CatImageLabel
+        class DateDocumentFilter
+        class HornedNumberPanel
+        class IconLabel
+        class Theme
+    }
+}
+
+Main --> SinController : creates
+
+SinController --> SinModel : uses
+SinController --> MainFrame : updates
+SinController --> InputDialog : opens
+SinController --> AudioPlayer : controls
+
+SinModel --> SinData : stores
+
+MainFrame --> SinModel : displays data
+
+InputDialog --> SinData : creates
+
+InputDialog --> DateDocumentFilter : uses
+InputDialog --> Theme : uses
+MainFrame --> Theme : uses
+CatImageLabel --> Theme : uses
+HornedNumberPanel --> Theme : uses
+IconLabel --> Theme : uses
+
+@enduml
